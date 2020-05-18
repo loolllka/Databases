@@ -89,6 +89,15 @@ SELECT YEAR(date_and_time) as year, MIN(price) AS minimal_price FROM sale GROUP 
 --Определяем среднее количество страниц в книге каждого автора
 SELECT author, AVG(number_of_pages) AS pages FROM book GROUP BY author HAVING AVG(number_of_pages) > 0;
 
+--8.1 Доп. задание
+--Найти книги, которые продали больше 5 раз
+SELECT sale.id_book, COUNT(sale.id_book) AS number_of_sales FROM sale  GROUP BY sale.id_book HAVING COUNT(sale.id_book) > 5 ;
+--Найти магазины, которые продают не менее 10 книг в месяц
+SELECT id_shop FROM sale WHERE id_shop IN
+(SELECT id_shop FROM sale GROUP BY id_shop, convert(varchar(7), date_and_time, 126) HAVING COUNT(id_book) >= 10) GROUP BY id_shop;
+--Найти книги, которые выпускаются несколькими издательскими домами
+SELECT id_book, COUNT(id_book) AS number_of_publishing_houses 
+FROM (SELECT id_book FROM book_reception GROUP BY id_book, id_publishing_house) AS id_book GROUP BY id_book HAVING COUNT(id_book) > 1;
 
 --9. SELECT JOIN
 SELECT * FROM shop;
