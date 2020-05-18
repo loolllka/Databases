@@ -95,6 +95,9 @@ SELECT sale.id_book, COUNT(sale.id_book) AS number_of_sales FROM sale  GROUP BY 
 --Найти магазины, которые продают не менее 10 книг в месяц
 SELECT id_shop FROM sale WHERE id_shop IN
 (SELECT id_shop FROM sale GROUP BY id_shop, convert(varchar(7), date_and_time, 126) HAVING COUNT(id_book) >= 10) GROUP BY id_shop;
+--или
+SELECT id_shop FROM
+(SELECT id_shop FROM sale GROUP BY id_shop, convert(varchar(7), date_and_time, 126)  HAVING COUNT(id_book) >= 10) AS id_shop GROUP BY id_shop;
 --Найти книги, которые выпускаются несколькими издательскими домами
 SELECT id_book, COUNT(id_book) AS number_of_publishing_houses 
 FROM (SELECT id_book FROM book_reception GROUP BY id_book, id_publishing_house) AS id_book GROUP BY id_book HAVING COUNT(id_book) > 1;
